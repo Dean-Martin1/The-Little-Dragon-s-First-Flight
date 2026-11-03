@@ -138,7 +138,7 @@ public class AccessModifierDemo {
 			logger.info("Executing finally block");
 			ember.rest();
 
-			System.out.println("Final status - testing Git revert");
+			System.out.println("Final status:");
 			ember.showStatus();
 			logger.info("The Little Dragon application finished");
 		}
