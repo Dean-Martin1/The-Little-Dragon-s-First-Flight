@@ -1,6 +1,4 @@
 
-<?xml version="1.0" encoding="UTF-8"?>
-
 <Configuration status="WARN">
 
     <Properties>
@@ -9,14 +7,14 @@
 
     <Appenders>
 
+        <!-- Save logging messages to a text file -->
         <RollingFile
             name="fileLogger"
             fileName="${basePath}/debug.log"
-            filePattern="${basePath}/debug_%d{MM-dd-yyyy}.log">
+            filePattern="${basePath}/debug-%d{yyyy-MM-dd}.log">
 
-            <PatternLayout>
-                <Pattern>%d{MM-dd-yyyy HH:mm:ss.SSS} %-5level [%logger{36}] - %msg%n</Pattern>
-            </PatternLayout>
+            <PatternLayout
+                pattern="%d{MM-dd-yyyy HH:mm:ss.SSS} %-5level [%logger{36}] - %msg%n"/>
 
             <Policies>
                 <TimeBasedTriggeringPolicy
@@ -26,6 +24,7 @@
 
         </RollingFile>
 
+        <!-- Show logging messages in Eclipse Console -->
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout
                 pattern="%d{HH:mm:ss.SSS} %-5level [%logger{36}] - %msg%n"/>
@@ -34,12 +33,10 @@
     </Appenders>
 
     <Loggers>
-
         <Root level="debug">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="fileLogger"/>
         </Root>
-
     </Loggers>
 
 </Configuration>
