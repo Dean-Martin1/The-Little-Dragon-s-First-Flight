@@ -1,0 +1,18 @@
+
+# Compiled Java output
+/bin/
+*.class
+
+# Generated application logs
+/logs/
+*.log
+
+# Local dependency binaries
+/lib/*.jar
+
+# Local Eclipse workspace metadata
+.metadata/
+
+# Operating system files
+.DS_Store
+Thumbs.db
