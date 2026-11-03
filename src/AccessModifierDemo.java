@@ -1,110 +1,146 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+/*
+ * Project: The Little Dragon's First Flight
+ *
+ * This application demonstrates:
+ * 1. Java access modifiers
+ * 2. Inheritance
+ * 3. Exception handling using try, catch and finally
+ * 4. Log4j2 logging to the console and a text file
+ */
+
 class GameCharacter {
 
-    // Public
-    public String name;
+	// Logger records character activities
+	private static final Logger logger = LogManager.getLogger(GameCharacter.class);
 
-    // Private
-    private int health = 100;
+	// Public
+	public String name;
 
-    // Protected
-    protected int energy = 50;
+	// Private
+	private int health = 100;
 
-    int score = 0;
+	// Protected
+	protected int energy = 50;
 
-    public GameCharacter(String name) {
-        this.name = name;
-    }
+	int score = 0;
 
-    // Public method
-    public void showStatus() {
-        System.out.println("Name: " + name);
-        System.out.println("Health: " + health);
-        System.out.println("Energy: " + energy);
-        System.out.println("Score: " + score);
-    }
+	public GameCharacter(String name) {
+		this.name = name;
+		logger.info("Character created: " + name);
+	}
 
-    // Private method
-    private void restoreHealth() {
-        health = 100;
-    }
+	// Public method
+	public void showStatus() {
+		System.out.println("Name: " + name);
+		System.out.println("Health: " + health);
+		System.out.println("Energy: " + energy);
+		System.out.println("Score: " + score);
+		logger.info("Status: " + name + ", Health: " + health + ", Energy: " + energy + ", Score: " + score);
+	}
 
-    // Protected method
-    protected void fly() {
+	// Private method
+	private void restoreHealth() {
+		health = 100;
+		logger.info(name + "'s health restored to 100");
+	}
 
-        // Check whether Ember has enough energy
-        if (energy < 10) {
+	// Protected method
+	protected void fly() {
 
-            // Throw an exception when energy is too low
-            throw new IllegalStateException(
-                name + " does not have enough energy to fly."
-            );
-        }
+		logger.debug(name + " is attempting to fly");
 
-        energy = energy - 10;
-        score++;
+		// Check whether Ember has enough energy
+		if (energy < 10) {
 
-        System.out.println(name + " flies to the next path.");
-    }
-    
-    // Default access method.
-    void collectItem() {
-        score = score + 5;
+			logger.warn(name + " does not have enough energy to fly");
 
-        System.out.println(name + " collects an item.");
-    }
+			// Throw an exception when energy is too low
+			throw new IllegalStateException(name + " does not have enough energy to fly.");
+		}
 
-    public void rest() {
-        restoreHealth();
-        System.out.println(name + " rests.");
-    }
+		energy = energy - 10;
+		score++;
+
+		System.out.println(name + " flies to the next path.");
+
+		logger.info(name + " successfully completed a flight");
+
+		logger.debug("Remaining energy: " + energy);
+	}
+
+	// Default access method.
+	void collectItem() {
+		score = score + 5;
+
+		System.out.println(name + " collects an item.");
+
+		logger.info(name + " collected an item");
+	}
+
+	public void rest() {
+		restoreHealth();
+		System.out.println(name + " rests.");
+		logger.info(name + " completed resting");
+	}
 }
 
 // Ember is a subclass of GameCharacter
 class Ember extends GameCharacter {
 
-    public Ember() {
-        super("Ember");
-    }
+	public Ember() {
+		super("Ember");
+	}
 
-    public void travel() {
-        fly();
-        collectItem();
-    }
+	public void travel() {
+		fly();
+		collectItem();
+	}
 }
 
 public class AccessModifierDemo {
+	
+	private static final Logger logger = LogManager.getLogger(AccessModifierDemo.class);
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
+		
+		logger.info("The Little Dragon application started");
 
-    	Ember ember = new Ember();
+		Ember ember = new Ember();
 
-        System.out.println("The Little Dragon's First Flight");
-        System.out.println("--------------------------------");
+		System.out.println("The Little Dragon's First Flight");
+		System.out.println("--------------------------------");
 
-        ember.showStatus();
+		ember.showStatus();
 
-        try {
+		try {
 
-            // Attempt six flights
-            // Ember only has enough energy for five
-            for (int i = 1; i <= 6; i++) {
+			// Attempt six flights
+			// Ember only has enough energy for five
+			for (int i = 1; i <= 6; i++) {
 
-                System.out.println("Flight attempt: " + i);
-                ember.travel();
-            }
+				System.out.println("Flight attempt: " + i);
+				logger.debug("Starting flight attempt: " + i);
+				ember.travel();
+			}
 
-        } catch (IllegalStateException e) {
+		} catch (IllegalStateException e) {
 
-            // Handle the exception safely
-            System.out.println("Error: " + e.getMessage());
+			// Handle the exception safely
+			System.out.println("Error: " + e.getMessage());
+			logger.error("Flight failed due to low energy", e);
 
-        } finally {
+		} finally {
 
-            // Always executes
-            ember.rest();
+			// Always executes
+			logger.info("Executing finally block");
+			ember.rest();
 
-            System.out.println("Final status:");
-            ember.showStatus();
-        }
-    }
+			System.out.println("Final status:");
+			ember.showStatus();
+			logger.info("The Little Dragon application finished");
+		}
+	}
 }
